@@ -2,8 +2,10 @@ package br.com.springboot.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,15 +20,15 @@ public class UserController {
     
 private List<User> users = new ArrayList<User>();
 
-    @GetMapping("/")
-    public User user(){
+    @GetMapping("/{id}")
+    public User user(@PathVariable("id") Long id){
 
-        User user = new User();
-        user.setId(1L);
-        user.setName("Gui");
-        user.setUsername("Guilherme");
-
-        return user;
+       Optional<User> userId = users.stream().filter(user -> user.getId() == id).findFirst();
+        
+       if(userId.isPresent()){
+        return userId.get();
+       }
+        return null;
     }
 
     @PostMapping("/")
